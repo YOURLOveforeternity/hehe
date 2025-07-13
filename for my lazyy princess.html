@@ -1,0 +1,183 @@
+<!-- Save this as index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Our Valorant Love Book</title>
+  <style>
+    body {
+      background: #ffe6f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+    }
+
+    .book {
+      width: 600px;
+      height: 400px;
+      background: #fff8f9;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 40px;
+      font-family: Georgia, serif;
+      font-size: 18px;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    .page p {
+      margin: 0;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+    }
+
+    button {
+      background: #ff99c8;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #ff66a6;
+    }
+
+    .heart {
+      position: fixed;
+      font-size: 20px;
+      animation: floatUp 3s ease-out forwards;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-200px) scale(1.5);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_45e7efb772.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+</audio>
+
+<div class="book">
+  <div class="page" id="pageContent">
+    <p style="text-align:center; font-size:24px;">
+      🎮💘 Tap to Open Our Valorant Rizz Book 💘🎮
+    </p>
+    <div class="controls">
+      <button onclick="startBook()">Open</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const pages = [
+`Hey troublemaker. 💘 Do you remember the first time we queued up in Valorant? I swear my aim wasn’t shaky because of the enemy — it was because you were there, making my heartbeat spike higher than my headshots ever could.`,
+
+`Every match with you is better than any ace. When you rage at me for pushing alone, I swear you look hotter than a Phoenix ult. And trust me — I'd throw every round just to hear you call me out with that fire. 🔥😉`,
+
+`You curse the randoms, mute the lobby and rant only to me. That's my favorite flex — that I’m the one who gets to hear your real voice, your soft "baby" after your angry "idiot". Keep yelling, princess. It sounds like love to me. 👑💋`,
+
+`And don’t think I don’t see how cute you are when you get jealous. One "Who’s she?" from you and I swear the whole lobby knows you own me. If my crosshair ever flicks away, it’s only because you already have my eyes. 💘🎯`,
+
+`Remember those nights till the sun creeps in and we’re laughing like kids who broke the rules? Rank resets, but my love for you only stacks higher every night. 🌙✨`,
+
+`Long distance tries to lag us out, but you’re my best ping. Even a million miles away, your voice in my headset feels closer than my next kill. If I could TP through the screen, you’d never play solo again. 🗺️🎧`,
+
+`We fight sometimes — about who bottom frags, who didn’t plant, who’s the better duelist. But even in our worst rounds, you’re still my best teammate. Even your "I hate you" sounds like "I can’t live without you." 🫶`,
+
+`You make Valorant my second favorite game. First place? Winning your heart every damn day. You say "Let’s go, baby" when I clutch, but baby, it’s you who carries my whole heart, round after round. 💖🏆`,
+
+`Sometimes I imagine our future — same agents, same duo, but the lobby is our living room. You’d smack my arm when I whiff, I’d steal your snacks when you’re top fragging. Real life or Ranked, my favorite map is wherever you are. 🏡🥰`,
+
+`I love your sleepy voice, your giggles when you call me dumb, your rants when someone insta-locks your main. You’re my perfect line-up — always hitting me right in the feels. 💘🎯`,
+
+`So here’s my love book — a confession every page, a clutch every line. More rizz than my flicks, more truth than any scoreboard. If I could ult our story, it would always lock us in the same match forever. 🫶✨`,
+
+`Remember this: you’re my duo, my pocket Sage, my one tap dream. If life’s a 1v5, you’re the only buff I need. Now come online — I need you to carry me again, Queen. 🎮👑❤️`,
+
+`No distance, no tilt, no bad lobbies can break our match history. We’re endgame — forever duo, forever us. Now say it: "I love you too." Or I’ll throw your next comp on purpose. 😉💘`
+  ];
+
+  let currentPage = 0;
+
+  function startBook() {
+    document.getElementById('bgMusic').play();
+    nextPage();
+  }
+
+  function nextPage() {
+    const pageContent = document.getElementById('pageContent');
+    if (currentPage < pages.length) {
+      pageContent.innerHTML = `<p>${pages[currentPage]}</p><div class="controls">
+        <button onclick="nextPage()">Next Page ❤️</button>
+      </div>`;
+      speakText(pages[currentPage]);
+      floatHeartsAndSparkles();
+      currentPage++;
+    } else {
+      speakText("The End. Now say it back: I love you too!");
+      pageContent.innerHTML = `<p style="text-align:center; font-size:24px;">🎮💘 The End 💘🎮<br>Ready for another round?</p>
+      <div class="controls">
+        <button onclick="replayBook()">Replay Book 🔁</button>
+      </div>`;
+    }
+  }
+
+  function speakText(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.pitch = 1.1;
+      utterance.rate = 1;
+      speechSynthesis.speak(utterance);
+    }
+  }
+
+  function floatHeartsAndSparkles() {
+    for (let i = 0; i < 12; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = Math.random() > 0.5 ? '❤️' : '✨';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.top = (window.innerHeight - 50) + 'px';
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 3000);
+    }
+  }
+
+  function replayBook() {
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
+
